@@ -40,16 +40,19 @@ pane_resizing_bindings() {
 }
 
 pane_split_bindings() {
-	tmux bind-key "|" split-window -h -c "#{pane_current_path}"
-	tmux bind-key "\\" split-window -fh -c "#{pane_current_path}"
-	tmux bind-key "-" split-window -v -c "#{pane_current_path}"
-	tmux bind-key "_" split-window -fv -c "#{pane_current_path}"
-	tmux bind-key "%" split-window -h -c "#{pane_current_path}"
-	tmux bind-key '"' split-window -v -c "#{pane_current_path}"
+	tmux bind-key "|" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -h -c '#{pane_current_path}'"
+	tmux bind-key "\\" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -fh -c '#{pane_current_path}'"
+	tmux bind-key "-" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -v -c '#{pane_current_path}'"
+	tmux bind-key "_" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -fv -c '#{pane_current_path}'"
+	tmux bind-key "%" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -h -c '#{pane_current_path}'"
+	tmux bind-key '"' run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux split-window -v -c '#{pane_current_path}'"
+
 }
 
 improve_new_window_binding() {
-	tmux bind-key "c" new-window -c "#{pane_current_path}"
+    tmux bind-key "c" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux new-window -c '#{pane_current_path}'"
+    tmux bind-key "C" command-prompt -p "Set default new-window command:"  "setenv TMUX_CMD '%%'"
+
 }
 
 main() {
