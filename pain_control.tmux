@@ -49,28 +49,10 @@ pane_split_bindings() {
 
 }
 
-get-tmux-option() {
-	tmux show-option -gqv "$1"
-}
-
-improve_new_window_binding() {
-    local key="$(get-tmux-option '@pain-control.new-window')"
-    if test -n "$key"; then
-        tmux bind-key "$key" run-shell "tmux showenv TMUX_CMD | sed 's/^.*=//' | xargs tmux new-window -c '#{pane_current_path}'"
-    fi
-
-    local key="$(get-tmux-option '@pain-control.default-command')"
-    if test -n "$key"; then
-        tmux bind-key "$key" command-prompt -p "Set default new-window command:"  "setenv TMUX_CMD '%%'"
-    fi
-
-}
-
 main() {
 	pane_navigation_bindings
 	window_move_bindings
 	pane_resizing_bindings
 	pane_split_bindings
-	improve_new_window_binding
 }
 main
